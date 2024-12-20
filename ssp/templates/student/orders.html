@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders - Campus Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&family=Old+Standard+TT&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
+    <style>
+      :root {
+          --text-color: #8f3c2d;
+          --background-color: #ffead6;
+          --primary-color: #e07b39;
+          --secondary-color: #886363;
+          --accent-color: #743939;
+      }
+
+      body {
+          font-family: "Old Standard TT", serif;
+          background-color: var(--background-color);
+          color: var(--text-color);
+          line-height: 1.6;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+          font-family: "Alegreya", serif;
+          color: var(--accent-color);
+      }
+
+      .navbar {
+          background-color: var(--accent-color);
+          padding: 1rem 2rem;
+      }
+
+      .navbar-brand {
+          font-family: "Alegreya", serif;
+          font-size: 1.8rem;
+          color: var(--background-color) !important;
+      }
+
+      .nav-link {
+          color: var(--background-color) !important;
+          font-family: "Old Standard TT", serif;
+          font-size: 1.1rem;
+          margin: 0 0.5rem;
+          transition: color 0.3s ease;
+      }
+
+      .nav-link:hover {
+          color: var(--primary-color) !important;
+      }
+
+      .btn-primary {
+          background-color: var(--primary-color);
+          border-color: var(--primary-color);
+          color: var(--background-color);
+          transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+          background-color: var(--accent-color);
+          border-color: var(--accent-color);
+      }
+
+      .btn-secondary {
+          background-color: var(--secondary-color);
+          border-color: var(--secondary-color);
+          color: var(--background-color);
+          transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+          background-color: var(--accent-color);
+          border-color: var(--accent-color);
+      }
+
+      .card {
+          border: none;
+          border-radius: 15px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          background-color: white;
+          margin-bottom: 1.5rem;
+      }
+
+      .card-header {
+          background-color: var(--primary-color);
+          color: var(--background-color);
+          border-radius: 15px 15px 0 0 !important;
+          font-family: "Alegreya", serif;
+          font-size: 1.5rem;
+      }
+
+      .footer {
+          background-color: var(--accent-color);
+          color: var(--background-color);
+          padding: 2rem 0;
+          width: 100%;
+          margin-top: 3rem;
+      }
+
+      .footer a:hover {
+          color: var(--primary-color);
+          text-decoration: underline;
+      }
+
+      .custom-container {
+          background-color: white;
+          border-radius: 15px;
+          padding: 2rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          margin-top: 2rem;
+      }
+
+      .form-control {
+          border: 2px solid var(--secondary-color);
+          border-radius: 8px;
+      }
+
+      .form-control:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 0.2rem rgba(224, 123, 57, 0.25);
+      }
+
+      .row {
+          justify-content: center;
+      }
+
+
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .animate-fade-out {
+            animation: fadeOut 0.3s ease-out;
+        }
+
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+        }
+
+  </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('student.home') }}"
+          >Campus Cart</a
+        >
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.profile') }}"
+              >Profile</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.cart') }}">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.notifications') }}"
+              >Notifications</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.orders') }}"
+              >Orders</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.logout') }}"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+ 
+    <main class="container mx-auto py-8 px-4">
+        <div class="space-y-6">
+            <h2 class="text-2xxl font-bold">Order Details</h2>
+
+            <!-- Active Orders Section -->
+            <div class="profile-card rounded-lg p-6">
+                <div class="custom-container">
+                <h2 class="text-2xl font-bold mb-6">Your Active Orders</h2>
+                <div class="space-y-4">
+                    {% for order in orders %}
+                    <div class="border-b pb-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="font-semibold">Order #{{ order.id }}</h3>
+                                <p class="text-sm text-gray-600">Status: {{ order.status }}</p>
+                                <p class="text-sm text-gray-600">Order Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                            </div>
+                            <div class="text-right">
+                                {% if order.status == 'Pending' %}
+                                    <form action="{{ url_for('student.cancel_order', order_id=order.id) }}" method="POST" class="inline">
+                                        <button type="submit" class="btn-primary px-3 py-1 rounded-md text-sm mt-2" 
+                                                onclick="return confirm('Are you sure you want to cancel this order?')">
+                                            Cancel Order
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Order Items Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="px-4 py-2 text-left">Item</th>
+                                        <th class="px-4 py-2 text-center">Quantity</th>
+                                        <th class="px-4 py-2 text-right">Price</th>
+                                        <th class="px-4 py-2 text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.items %}
+                                    <tr class="border-t">
+                                        <td class="px-4 py-2">{{ item.product_name }}</td>
+                                        <td class="px-4 py-2 text-center">{{ item.quantity }}</td>
+                                        <td class="px-4 py-2 text-right">₹{{ "%.2f"|format(item.price) }}</td>
+                                        <td class="px-4 py-2 text-right">₹{{ "%.2f"|format(item.total_price) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr class="border-t font-semibold">
+                                        <td colspan="3" class="px-4 py-2 text-right">Order Total:</td>
+                                        <td class="px-4 py-2 text-right">₹{{ "%.2f"|format(order.total_price) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>You have no active orders.</p>
+                    {% endfor %}
+                </div>
+            </div>
+ 
+
+
+      <!-- Past Orders Section -->
+            <div class="profile-card rounded-lg p-6">
+                <div class="custom-container">
+
+                <h2 class="text-2xl font-bold mb-6">Your Past Orders</h2>
+                <div class="space-y-4">
+                    {% for order in past_orders %}
+                    <div class="border-b pb-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="font-semibold">Order #{{ order.id }}</h3>
+                                <p class="text-sm text-gray-600">Status: {{ order.status }}</p>
+                                <p class="text-sm text-gray-600">Order Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                            </div>
+                            {% if order.status == 'Completed' %}
+                                <!-- <button onclick="openReviewModal('{{ order.id }}')" class="btn-primary px-3 py-1 rounded-md text-sm">Post Review</button> -->
+                            {% endif %}
+                        </div>
+
+                        <!-- Order Items Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="px-4 py-2 text-left">Item</th>
+                                        <th class="px-4 py-2 text-center">Quantity</th>
+                                        <th class="px-4 py-2 text-right">Price</th>
+                                        <th class="px-4 py-2 text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.items %}
+                                    <tr class="border-t">
+                                        <td class="px-4 py-2">{{ item.product_name }}</td>
+                                        <td class="px-4 py-2 text-center">{{ item.quantity }}</td>
+                                        <td class="px-4 py-2 text-right">₹{{ "%.2f"|format(item.price) }}</td>
+                                        <td class="px-4 py-2 text-right">₹{{ "%.2f"|format(item.total_price) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr class="border-t font-semibold">
+                                        <td colspan="3" class="px-4 py-2 text-right">Order Total:</td>
+                                        <td class="px-4 py-2 text-right">₹{{ "%.2f"|format(order.total_price) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>You have no past orders.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+    </main>
+    
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal fixed inset-0 hidden flex items-center justify-center">
+        <div class="modal-content rounded-lg p-6 w-96">
+            <h3 class="text-xl font-bold mb-4">Post Your Review</h3>
+            <div id="reviewOrderId" class="text-sm text-gray-600 mb-4"></div>
+            <div class="flex justify-center space-x-2 mb-4">
+                <span class="star text-3xl cursor-pointer" data-rating="1">★</span>
+                <span class="star text-3xl cursor-pointer" data-rating="2">★</span>
+                <span class="star text-3xl cursor-pointer" data-rating="3">★</span>
+                <span class="star text-3xl cursor-pointer" data-rating="4">★</span>
+                <span class="star text-3xl cursor-pointer" data-rating="5">★</span>
+            </div>
+            
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeReviewModal()" class="px-4 py-2 border rounded-md">Cancel</button>
+                <button onclick="submitReview()" class="btn-primary px-4 py-2 rounded-md">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedOrderId = null;
+    
+        function openReviewModal(orderId) {
+            selectedOrderId = orderId;
+            document.getElementById('reviewOrderId').innerText = `Order ID: ${orderId}`;
+            document.getElementById('reviewModal').classList.remove('hidden');
+            document.getElementById('reviewModal').classList.add('animate-fade-in');
+        }
+    
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('animate-fade-in');
+            document.getElementById('reviewModal').classList.add('animate-fade-out');
+            setTimeout(() => {
+                document.getElementById('reviewModal').classList.add('hidden');
+                document.getElementById('reviewModal').classList.remove('animate-fade-out');
+            }, 300);
+        }
+    
+        function submitReview() {
+            const stars = document.querySelectorAll('.star');
+            let rating = 0;
+    
+            stars.forEach(star => {
+                if (star.classList.contains('text-yellow-400')) rating++;
+            });
+    
+    
+            // Send review to the server (this is a placeholder, replace with actual API call)
+            fetch('/api/submit-review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderId: selectedOrderId,
+                    rating: rating,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Review submitted successfully!');
+                    closeReviewModal();
+                } else {
+                    alert('Error submitting review. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        }
+    
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function () {
+                const rating = this.dataset.rating;
+                document.querySelectorAll('.star').forEach(s => {
+                    s.classList.toggle('text-yellow-400', s.dataset.rating <= rating);
+                    s.classList.toggle('text-gray-300', s.dataset.rating > rating);
+                });
+            });
+        });
+    </script>
+        <footer class="footer text-center">
+            <p>&copy; 2024 Campus Cart. All Rights Reserved.</p>
+            <p>
+                <a href="#" class="text-white">Terms of Service</a> |
+                <a href="#" class="text-white">Privacy Policy</a> |
+                <a href="#" class="text-white">Contact Us</a>
+            </p>
+        </footer>
+</body>
+</html>

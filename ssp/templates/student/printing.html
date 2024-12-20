@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printing Service - Campus Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&family=Old+Standard+TT&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
+    <style>
+      :root {
+          --text-color: #8f3c2d;
+          --background-color: #ffead6;
+          --primary-color: #e07b39;
+          --secondary-color: #886363;
+          --accent-color: #743939;
+      }
+
+      body {
+          font-family: "Old Standard TT", serif;
+          background-color: var(--background-color);
+          color: var(--text-color);
+          line-height: 1.6;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+          font-family: "Alegreya", serif;
+          color: var(--accent-color);
+      }
+
+      .navbar {
+          background-color: var(--accent-color);
+          padding: 1rem 2rem;
+      }
+
+      .navbar-brand {
+          font-family: "Alegreya", serif;
+          font-size: 1.8rem;
+          color: var(--background-color) !important;
+      }
+
+      .nav-link {
+          color: var(--background-color) !important;
+          font-family: "Old Standard TT", serif;
+          font-size: 1.1rem;
+          margin: 0 0.5rem;
+          transition: color 0.3s ease;
+      }
+
+      .nav-link:hover {
+          color: var(--primary-color) !important;
+      }
+
+      .btn-primary {
+          background-color: var(--primary-color);
+          border-color: var(--primary-color);
+          color: var(--background-color);
+          transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+          background-color: var(--accent-color);
+          border-color: var(--accent-color);
+      }
+
+      .btn-secondary {
+          background-color: var(--secondary-color);
+          border-color: var(--secondary-color);
+          color: var(--background-color);
+          transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+          background-color: var(--accent-color);
+          border-color: var(--accent-color);
+      }
+
+      .card {
+          border: none;
+          border-radius: 15px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          background-color: white;
+          margin-bottom: 1.5rem;
+      }
+
+      .card-header {
+          background-color: var(--primary-color);
+          color: var(--background-color);
+          border-radius: 15px 15px 0 0 !important;
+          font-family: "Alegreya", serif;
+          font-size: 1.5rem;
+      }
+
+      .footer {
+          background-color: var(--accent-color);
+          color: var(--background-color);
+          padding: 2rem 0;
+          width: 100%;
+          margin-top: 3rem;
+      }
+
+      .footer a:hover {
+          color: var(--primary-color);
+          text-decoration: underline;
+      }
+
+      .custom-container {
+          background-color: white;
+          border-radius: 15px;
+          padding: 2rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          margin-top: 2rem;
+      }
+
+      .form-control {
+          border: 2px solid var(--secondary-color);
+          border-radius: 8px;
+      }
+
+      .form-control:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 0.2rem rgba(224, 123, 57, 0.25);
+      }
+
+      .row {
+          justify-content: center;
+      }
+      .cart-message {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+  </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('student.home') }}"
+          >Campus Cart</a
+        >
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.profile') }}"
+              >Profile</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.cart') }}">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.notifications') }}"
+              >Notifications</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.orders') }}"
+              >Orders</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.logout') }}"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+      <div class="welcome-section pt-20 pb-8 px-6">
+        <div class="container mx-auto">
+          <div class="bg-gradient-to-r from-[#34495e] to-[#2c3e50] rounded-lg p-6 shadow-lg">
+            <h1 class="text-3xl md:text-4xl text-[#f7f1e3] font-bold">
+              Printing Services 🖨️
+            </h1>
+            <p class="text-[#f1c40f] mt-2 text-lg">
+              Upload your documents and customize your print settings
+            </p>
+          </div>
+        </div>
+      </div>
+
+      
+
+    <main class="container mx-auto py-8 px-4">
+        <div class="card rounded-lg p-6 max-w-2xl mx-auto">
+            <h1 class="text-2xl font-bold mb-6">Print Document</h1>
+            
+            <form id="printForm" class="space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <label for="file" class="block text-sm font-medium text-gray-700">Upload File</label>
+                        <input 
+                            type="file" 
+                            id="file" 
+                            name="file" 
+                            accept=".pdf,.doc,.docx"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#F1C40F] focus:border-[#F1C40F]"
+                        >
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="copies" class="block text-sm font-medium text-gray-700">Number of Copies</label>
+                            <input 
+                                type="number" 
+                                id="copies" 
+                                name="copies" 
+                                min="1" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#F1C40F] focus:border-[#F1C40F]"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="pageRange" class="block text-sm font-medium text-gray-700">Page Range</label>
+                            <input 
+                                type="text" 
+                                id="pageRange" 
+                                name="pageRange" 
+                                placeholder="e.g., 1-5, 8, 11-13" 
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#F1C40F] focus:border-[#F1C40F]"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Print Color</label>
+                            <div class="mt-2 space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="color" value="bw" class="form-radio text-[#F1C40F]" checked>
+                                    <span class="ml-2">Black & White</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="color" value="color" class="form-radio text-[#F1C40F]">
+                                    <span class="ml-2">Color</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Print Side</label>
+                            <div class="mt-2 space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="side" value="single" class="form-radio text-[#F1C40F]" checked>
+                                    <span class="ml-2">Single Side</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="side" value="double" class="form-radio text-[#F1C40F]">
+                                    <span class="ml-2">Double Side</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="paperSize" class="block text-sm font-medium text-gray-700">Paper Size</label>
+                            <select 
+                                id="paperSize" 
+                                name="paperSize" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#F1C40F] focus:border-[#F1C40F]"
+                            >
+                                <option value="A4">A4</option>
+                                <option value="A3">A3</option>
+                                <option value="Letter">Letter</option>
+                                <option value="Legal">Legal</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="orientation" class="block text-sm font-medium text-gray-700">Orientation</label>
+                            <select 
+                                id="orientation" 
+                                name="orientation" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#F1C40F] focus:border-[#F1C40F]"
+                            >
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-gray-700">Additional Notes</label>
+                            <textarea 
+                                id="notes" 
+                                name="notes" 
+                                rows="3" 
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#F1C40F] focus:border-[#F1C40F]"
+                                placeholder="Any special instructions..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button 
+                        type="submit" 
+                        class="btn-primary px-6 py-2 rounded-md transition-colors duration-200"
+                    >
+                        Submit Print Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <div
+      id="cartMessage"
+      class="cart-message"
+      role="alert"
+      aria-live="assertive"
+    ></div>
+    <script>
+        document.getElementById('printForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            // Calculate price based on selections
+            let basePrice = 5; // Base price per page
+            if (formData.get('color') === 'color') {
+                basePrice += 5;
+            }
+            if (formData.get('side') === 'double') {
+                basePrice += 2;
+            }
+            
+            // Create cart data
+            const cartData = new FormData();
+            cartData.append('name', 'Print Job - ' + formData.get('file').name);
+            cartData.append('quantity', formData.get('copies'));
+            cartData.append('price', basePrice);
+            cartData.append('specifications', JSON.stringify({
+                file: formData.get('file'),
+                pageRange: formData.get('pageRange'),
+                color: formData.get('color'),
+                side: formData.get('side'),
+                paperSize: formData.get('paperSize'),
+                orientation: formData.get('orientation'),
+                additionalNotes: formData.get('notes')
+            }));
+
+            // Add to cart instead of direct order
+            fetch('{{ url_for("student.add_to_cart") }}', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: cartData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showCartMessage('Print job added to cart successfully!');
+                    document.getElementById('printForm').reset();
+                } else {
+                    showCartMessage('Error: ' + (data.error || 'Failed to add to cart'));
+                }
+            })
+            .catch(error => {
+                showCartMessage('Print job added to cart ');
+                // TODO: Add error handling
+                console.error('Error:', error);
+            });
+        });
+
+        // function showCartMessage(message) {
+        //     const cartMessage = document.getElementById('cartMessage');
+        //     cartMessage.textContent = message;
+        //     cartMessage.classList.add('show');
+            
+        //     setTimeout(() => {
+        //         cartMessage.classList.remove('show');
+        //     }, 3000);
+        // }
+        function showCartMessage(message) {
+    const cartMessage = document.getElementById('cartMessage');
+    cartMessage.textContent = message;
+    cartMessage.style.display = 'block'; // Ensure it is visible
+    
+    setTimeout(() => {
+        cartMessage.style.display = 'none'; // Hide it after 3 seconds
+    }, 3000);
+}
+
+    </script>
+        <footer class="footer text-center">
+            <p>&copy; 2024 Campus Cart. All Rights Reserved.</p>
+            <p>
+                <a href="#" class="text-white">Terms of Service</a> |
+                <a href="#" class="text-white">Privacy Policy</a> |
+                <a href="#" class="text-white">Contact Us</a>
+            </p>
+        </footer>
+</body>
+</html>

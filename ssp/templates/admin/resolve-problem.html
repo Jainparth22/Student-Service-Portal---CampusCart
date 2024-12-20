@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolve Problem - Campus Cart Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&family=Old+Standard+TT&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
+    <style>
+        :root {
+            --text-color: #8f3c2d;
+            --background-color: #ffead6;
+            --primary-color: #e07b39;
+            --secondary-color: #886363;
+            --accent-color: #743939;
+        }
+
+        body {
+            font-family: "Old Standard TT", serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Alegreya", serif;
+            color: var(--accent-color);
+        }
+
+        .navbar {
+            background-color: var(--accent-color);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-family: "Alegreya", serif;
+            font-size: 1.8rem;
+            color: var(--background-color) !important;
+        }
+
+        .nav-link {
+            color: var(--background-color) !important;
+            font-family: "Old Standard TT", serif;
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border-radius: 15px 15px 0 0 !important;
+            font-family: "Alegreya", serif;
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background-color: var(--accent-color);
+            color: var(--background-color);
+            padding: 2.7rem 0;
+            width: 100%;
+            margin-top: 5rem;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .custom-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(224, 123, 57, 0.25);
+        }
+
+        .row {
+            justify-content: center;
+        }
+        /* Keep all existing styles */
+    </style>
+    <script>
+        function handleButtonClick(action, id) {
+            const replyText = document.getElementById(`reply-text-${id}`);
+            if (action === 'resolved' && replyText.value.trim() === "") {
+                alert("Please enter a response before resolving the problem.");
+                return;
+            }
+            if (action === 'resolved') {
+                alert('Problem has been resolved');
+            } else if (action === 'reject') {
+                alert('Problem has been rejected');
+            }
+            document.getElementById(`problem-${id}`).remove();
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">Campus Cart</a>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="notifications.html">Notifications</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-8 px-4">
+        <h2 class="text-2xl text-[#F7F1E3] mb-6">Resolve Problems</h2>
+        
+        <div class="grid md:grid-cols-1 gap-6">
+            <div class="card rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Reported Problems</h3>
+                <div class="space-y-4" id="problem-list">
+                    <!-- Problem 1 -->
+                    <div class="border rounded-lg p-4" id="problem-1">
+                        <h4 class="font-semibold mb-2">Problem #1</h4>
+                        <textarea 
+                            class="w-full h-24 p-2 border rounded resize-none mb-2"
+                            readonly
+                        >The service provider hasn't delivered my order even though the ETA has passed.</textarea>
+                        <textarea 
+                            id="reply-text-1"
+                            class="w-full h-24 p-2 border rounded resize-none mb-2"
+                            placeholder="Type your response to the user..."
+                        ></textarea>
+                        <div class="flex justify-end space-x-2">
+                            <button class="btn-primary px-4 py-2 rounded" onclick="handleButtonClick('resolved', 1)">Resolve</button>
+                            <button class="btn-secondary px-4 py-2 rounded" onclick="handleButtonClick('reject', 1)">Reject</button>
+                        </div>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div class="border rounded-lg p-4" id="problem-2">
+                        <h4 class="font-semibold mb-2">Problem #2</h4>
+                        <textarea 
+                            class="w-full h-24 p-2 border rounded resize-none mb-2"
+                            readonly
+                        >I received the wrong item in my order. I ordered a textbook but received a notebook instead.</textarea>
+                        <textarea 
+                            id="reply-text-2"
+                            class="w-full h-24 p-2 border rounded resize-none mb-2"
+                            placeholder="Type your response to the user..."
+                        ></textarea>
+                        <div class="flex justify-end space-x-2">
+                            <button class="btn-primary px-4 py-2 rounded" onclick="handleButtonClick('resolved', 2)">Resolve</button>
+                            <button class="btn-secondary px-4 py-2 rounded" onclick="handleButtonClick('reject', 2)">Reject</button>
+                        </div>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div class="border rounded-lg p-4" id="problem-3">
+                        <h4 class="font-semibold mb-2">Problem #3</h4>
+                        <textarea 
+                            class="w-full h-24 p-2 border rounded resize-none mb-2"
+                            readonly
+                        >The quality of the product I received is not as described on the website. The backpack seems to be of lower quality.</textarea>
+                        <textarea 
+                            id="reply-text-3"
+                            class="w-full h-24 p-2 border rounded resize-none mb-2"
+                            placeholder="Type your response to the user..."
+                        ></textarea>
+                        <div class="flex justify-end space-x-2">
+                            <button class="btn-primary px-4 py-2 rounded" onclick="handleButtonClick('resolved', 3)">Resolve</button>
+                            <button class="btn-secondary px-4 py-2 rounded" onclick="handleButtonClick('reject', 3)">Reject</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer text-center">
+        <p>&copy; 2024 Campus Cart. All Rights Reserved.</p>
+        <p>
+            <a href="#" class="text-white">Terms of Service</a> |
+            <a href="#" class="text-white">Privacy Policy</a> |
+            <a href="#" class="text-white">Contact Us</a>
+        </p>
+    </footer>
+</body>
+</html>
+

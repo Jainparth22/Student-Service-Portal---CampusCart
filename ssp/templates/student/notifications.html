@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications - Campus Cart</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&family=Old+Standard+TT&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
+    <style>
+      :root {
+          --text-color: #8f3c2d;
+          --background-color: #ffead6;
+          --primary-color: #e07b39;
+          --secondary-color: #886363;
+          --accent-color: #743939;
+          --notification-color: yellow;
+      }
+
+      body {
+          font-family: "Old Standard TT", serif;
+          background-color: var(--background-color);
+          color: var(--text-color);
+          line-height: 1.6;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+          font-family: "Alegreya", serif;
+          color: var(--accent-color);
+      }
+
+      .navbar {
+          background-color: var(--accent-color);
+          padding: 1rem 2rem;
+      }
+
+      .navbar-brand {
+          font-family: "Alegreya", serif;
+          font-size: 1.8rem;
+          color: var(--background-color) !important;
+      }
+
+      .nav-link {
+          color: var(--background-color) !important;
+          font-family: "Old Standard TT", serif;
+          font-size: 1.1rem;
+          margin: 0 0.5rem;
+          transition: color 0.3s ease;
+      }
+
+      .nav-link:hover {
+          color: var(--primary-color) !important;
+      }
+
+      .btn-primary {
+          background-color: var(--primary-color);
+          border-color: var(--primary-color);
+          color: var(--background-color);
+          transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+          background-color: var(--accent-color);
+          border-color: var(--accent-color);
+      }
+
+      .btn-secondary {
+          background-color: var(--secondary-color);
+          border-color: var(--secondary-color);
+          color: var(--background-color);
+          transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+          background-color: var(--accent-color);
+          border-color: var(--accent-color);
+      }
+
+      .card {
+          border: none;
+          border-radius: 15px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          background-color: white;
+          margin-bottom: 1.5rem;
+      }
+
+      .card-header {
+          background-color: var(--primary-color);
+          color: var(--background-color);
+          border-radius: 15px 15px 0 0 !important;
+          font-family: "Alegreya", serif;
+          font-size: 1.5rem;
+      }
+
+      .footer {
+          background-color: var(--accent-color);
+          color: var(--background-color);
+          padding: 2rem 0;
+          width: 100%;
+          margin-top: 3rem;
+      }
+
+      .footer a:hover {
+          color: var(--primary-color);
+          text-decoration: underline;
+      }
+
+      .custom-container {
+          background-color: white;
+          border-radius: 15px;
+          padding: 2rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          margin-top: 2rem;
+      }
+
+      .form-control {
+          border: 2px solid var(--secondary-color);
+          border-radius: 8px;
+      }
+
+      .form-control:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 0.2rem rgba(224, 123, 57, 0.25);
+      }
+
+      .row {
+          justify-content: center;
+      }
+      .notification-item {
+    padding: 1rem 0;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-new {
+    background-color: var(--notification-color);
+}
+  </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('student.home') }}"
+          >Campus Cart</a
+        >
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.profile') }}"
+              >Profile</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.cart') }}">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.notifications') }}"
+              >Notifications</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.orders') }}"
+              >Orders</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student.logout') }}"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <!-- Order Notifications -->
+        
+              <div class="card shadow border-light">
+                  <div class="card-header text-center">Notifications</div>
+        <div class="mb-8">
+          <h3 class="text-2xxl font-bold mb-4">Order Updates</h3>
+          <div class="space-y-2">
+            {% for notification in notifications %} {% if
+            notification.event_type == 'order_update' %}
+            <div
+              class="notification-item {% if not notification.is_read %}notification-new{% endif %} p-4 rounded"
+              data-id="{{ notification.id }}"
+            >
+              <h4 class="font-semibold">
+                Order Status: {{ notification.status }}
+              </h4>
+              {% if notification.status == "Accepted" %}
+              <p>ETA: {{ notification.eta }}</p>
+              {% else %}
+              <p>Your order has been rejected.</p>
+              {% endif %}
+              <p class="text-sm text-gray-500">
+                {{ notification.created_date.strftime('%Y-%m-%d %H:%M:%S') }}
+              </p>
+
+              <!-- Mark as Read Form -->
+              <form
+                method="POST"
+                action="{{ url_for('student.mark_notification_read', notification_id=notification.id) }}"
+              >
+                <button type="submit" class="btn btn-link text-blue-500">
+                  Mark as Read
+                </button>
+              </form>
+            </div>
+            {% endif %} {% endfor %}
+          </div>
+        </div>
+
+        <!-- Admin Messages -->
+        <div>
+          <h3 class="text-2xxl font-bold mb-4">Messages from Admin</h3>
+          <div class="space-y-2">
+            {% for notification in notifications %} {% if
+            notification.event_type != 'order_update' %}
+            <div
+              class="notification-item {% if not notification.is_read %}notification-new{% endif %} p-4 rounded"
+              data-id="{{ notification.id }}"
+            >
+              <h4 class="font-semibold">Admin Message</h4>
+              <p>{{ notification.message }}</p>
+              <p class="text-sm text-gray-500">
+                {{ notification.created_date.strftime('%Y-%m-%d %H:%M:%S') }}
+              </p>
+
+              <!-- Mark as Read Form -->
+              <form
+                method="POST"
+                action="{{ url_for('student.mark_notification_read', notification_id=notification.id) }}"
+              >
+                <button type="submit" class="btn btn-link text-blue-500">
+                  Mark as Read
+                </button>
+              </form>
+            </div>
+            {% endif %} {% endfor %}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Optional: Mark notifications as read when clicked using JavaScript as well
+      document.querySelectorAll(".notification-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          this.classList.remove("notification-new"); // Mark the notification as read visually
+
+          // Fetch the notification ID from the data attribute
+          const notificationId = this.dataset.id;
+
+          // Send an AJAX request to mark as read in DB
+          fetch(`/mark_notification_read/${notificationId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log("Notification marked as read");
+              } else {
+                console.error("Failed to mark notification as read");
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+      });
+    </script>
+    <footer class="footer text-center">
+      <p>&copy; 2024 Campus Cart. All Rights Reserved.</p>
+      <p>
+        <a href="#" class="text-white">Terms of Service</a> |
+        <a href="#" class="text-white">Privacy Policy</a> |
+        <a href="#" class="text-white">Contact Us</a>
+      </p>
+    </footer>
+  </body>
+</html>
